@@ -2,6 +2,8 @@ package com.example.demo.config;
 
 import com.alibaba.fastjson2.JSONObject;
 import com.example.demo.entity.RestBean;
+import com.example.demo.service.AuthorizeService;
+import jakarta.annotation.Resource;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -22,6 +24,9 @@ import java.io.IOException;
 @EnableWebSecurity
 public class SecurityConfiguration {
 
+    @Resource
+    AuthorizeService authorizeService;
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
@@ -37,6 +42,7 @@ public class SecurityConfiguration {
                 .logout()
                 .logoutUrl("/api/auth/logout")
                 .and()
+                .userDetailsService(authorizeService)
                 //关闭 csrf
                 .csrf()
                 .disable()
@@ -46,12 +52,12 @@ public class SecurityConfiguration {
                 .build();
     }
 
-    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
+    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
         response.setCharacterEncoding("utf-8");
         response.getWriter().write(JSONObject.toJSONString(RestBean.success("登录成功")));
     }
 
-    public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
+    public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException {
         response.setCharacterEncoding("utf-8");
         response.getWriter().write(JSONObject.toJSONString(RestBean.failure(401,exception.getMessage())));
     }
