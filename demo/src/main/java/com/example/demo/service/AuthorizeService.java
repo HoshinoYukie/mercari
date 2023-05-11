@@ -24,7 +24,7 @@ public class AuthorizeService implements UserDetailsService {
             throw new UsernameNotFoundException("用户名或密码错误");
         return User
                 .withUsername(account.getUsername())
-                .password(account.getUserpwd())
+                .password(account.getPassword())
                 .roles("user")
                 .build();
     }
