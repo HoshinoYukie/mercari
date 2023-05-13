@@ -1,7 +1,11 @@
+<script setup>
+
+</script>
+
 <template>
-asdasd
+
 </template>
 
-<style>
+<style scoped>
 
 </style>
