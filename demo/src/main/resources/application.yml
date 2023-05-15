@@ -4,3 +4,15 @@ spring:
       url: jdbc:mysql://localhost:3306/mercari?characterEncoding=utf8&useUnicode=true&useSSL=false
       username: root
       password: password
+  mail:
+    host: smtp.qq.com
+    username: hoshinoyukie@foxmail.com
+    protocol: smtps
+    password: eklsaqtftegedgaj
+    port: 465
+    properties:
+      from: hoshinoyukie@foxmail.com
+      mail:
+        stmp:
+          ssl:
+            enable: true

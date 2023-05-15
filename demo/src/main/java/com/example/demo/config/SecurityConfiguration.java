@@ -41,6 +41,7 @@ public class SecurityConfiguration {
         return http
                 //权限认证
                 .authorizeHttpRequests()
+                .requestMatchers("/api/auth/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()

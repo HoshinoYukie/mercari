@@ -7,8 +7,12 @@
     <div class="welcome-title">
       <div>二手交易平台</div>
     </div>
-    <div style="width: 400px;background-color: white">
-      <router-view/>
+    <div style="width: 400px;background-color: white;z-index: 1">
+      <router-view v-slot="{ Component }">
+        <el-collapse-transition>
+          <component :is="Component" />
+        </el-collapse-transition>
+      </router-view>
     </div>
   </div>
 </template>
