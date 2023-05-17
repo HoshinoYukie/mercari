@@ -16,3 +16,9 @@ spring:
         stmp:
           ssl:
             enable: true
+  data:
+    redis:
+      database: 0
+      host: localhost
+      port: 6379
+      password: 12345678

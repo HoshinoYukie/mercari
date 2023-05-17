@@ -6,7 +6,7 @@
     <div style="margin-top: 30px">
       <el-form :model="form" :rules="rules" @validate="onValidate" ref="formRef">
         <el-form-item prop="username">
-          <el-input v-model="form.username" type="text" placeholder="用户名">
+          <el-input v-model="form.username" :maxlength="8" type="text" placeholder="用户名">
             <template #prefix>
               <el-icon slot="prefix"><User/></el-icon>
             </template>
@@ -36,14 +36,17 @@
         <el-form-item prop="code">
             <el-row :gutter="10">
               <el-col :span="17">
-                <el-input v-model="form.code" type="text" placeholder="请输入验证码">
+                <el-input v-model="form.code" :maxlength="5" type="text" placeholder="请输入验证码">
                   <template #prefix>
                     <el-icon slot="prefix"><EditPen/></el-icon>
                   </template>
                 </el-input>
               </el-col>
               <el-col :span="7" style="text-align: right">
-                <el-button @click="validateEmail" :disabled="!isEmailVaild">获取验证码</el-button>
+                <el-button type="primary" @click="validateEmail"
+                           :disabled="!isEmailValid || coldTime > 0">
+                  {{coldTime > 0 ? ' ' + coldTime + ' 秒后重试' : '获取验证码'}}
+                </el-button>
               </el-col>
             </el-row>
         </el-form-item>
@@ -79,7 +82,7 @@ const form = reactive({
 const validateUsername = (rule, value, callback) => {
   if (value === '') {
     callback(new Error('请输入用户名'))
-  } else if(!/^[A-Za-z0-9]+([.\-_][A-Za-z0-9]+)*/.test(value)) {
+  } else if(!/^[\u4e00-\u9fa5a-zA-Z0-9_-]+$/.test(value)) {
     callback(new Error('用户名不能以特殊字符开头或结尾'))
   } else {
     callback()
@@ -99,7 +102,7 @@ const validatePasswordRepeat = (rule, value, callback) => {
 const rules = {
   username: [
     { validator: validateUsername, trigger: ['blur', 'change'] },
-    { min: 2, max: 15, message: '用户名长度不能少于 2 且不能大于 15', trigger: ['blur', 'change'] },
+    { min: 2, max: 10, message: '用户名长度不能少于 2 且不能大于 10', trigger: ['blur', 'change'] },
   ],
   password: [
     { required:true, message: '密码不能为空', trigger: ['blur', 'change'] },
@@ -122,17 +125,26 @@ const rules = {
 }
 
 const formRef = ref()
-const isEmailVaild = ref(false);
+const isEmailValid = ref(false);
+const coldTime = ref(0)
 
 const onValidate = (prop, isValid) => {
   if(prop === 'email')
-    isEmailVaild.value = isValid;
+    isEmailValid.value = isValid;
 }
 
 const register = () => {
   formRef.value.validate((isValid) => {
     if(isValid){
-
+      post('/api/auth/register', {
+        username: form.username,
+        password: form.password,
+        email: form.email,
+        code: form.code
+      }, (success) => {
+        ElMessage.success(success);
+        router.push('/');
+      })
     } else {
       ElMessage.warning('请完整填写所有内容')
     }
@@ -140,12 +152,18 @@ const register = () => {
 }
 
 const validateEmail = () => {
-  post('/api/auth/valid-email', {
+  coldTime.value = 60
+  post('/api/auth/valid-create-email', {
     email:form.email
   }, (message) => {
     ElMessage.success(message)
+    setInterval(() => coldTime.value--, 1000)
+  }, (message) => {
+    ElMessage.warning(message)
+    coldTime.value = 0
   })
 }
+
 </script>
 
 <style scoped>
