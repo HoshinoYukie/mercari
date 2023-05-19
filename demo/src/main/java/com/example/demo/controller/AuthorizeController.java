@@ -24,7 +24,7 @@ public class AuthorizeController {
     AuthorizeService service;
 
     @PostMapping("/valid-create-email")
-    public RestBean<String> validEmail(@Pattern(regexp = EMAIL_REGEX) @RequestParam("email") String email,
+    public RestBean<String> validateRegisterEmail(@Pattern(regexp = EMAIL_REGEX) @RequestParam("email") String email,
                                        HttpSession session){
         String s = service.sendValidateEmail(email, session.getId(), false);
         if(s == null)

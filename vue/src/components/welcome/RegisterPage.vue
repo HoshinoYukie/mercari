@@ -157,7 +157,12 @@ const validateEmail = () => {
     email:form.email
   }, (message) => {
     ElMessage.success(message)
-    setInterval(() => coldTime.value--, 1000)
+    const timer = setInterval(() => {
+      coldTime.value--
+      if(this.timer <= 0) {
+        clearInterval(timer)
+      }
+    }, 1000)
   }, (message) => {
     ElMessage.warning(message)
     coldTime.value = 0

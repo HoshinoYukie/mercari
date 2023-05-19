@@ -1,6 +1,6 @@
 <template>
   <div style="width: 100vw;height: 100vh;overflow: hidden;display: flex">
-    <div style="flex: 1;background-color: dodgerblue">
+    <div style="flex: 1;background-color: white">
       <el-image style="width: 100%;height: 100%" fit="cover"
                 src="https://ts1.cn.mm.bing.net/th/id/R-C.80936e1e713a73518bf7abcfa4ae1a1e?rik=yS230r9Hoc2Oxg&riu=http%3a%2f%2fpic.bizhi360.com%2fbbpic%2f50%2f950.jpg&ehk=h4r8dA44aTPn6Dkaf%2fJBQ4GVBhAMxYwtQp8EuotGFb4%3d&risl=&pid=ImgRaw&r=0"/>
     </div>

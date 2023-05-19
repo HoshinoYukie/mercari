@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import {useStore} from "@/stores";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -16,20 +17,44 @@ const router = createRouter({
         {
           path: 'register',
           name: 'welcome-register',
-          component: () => import('@/components/welcome/registerPage.vue')
+          component: () => import('@/components/welcome/RegisterPage.vue')
         },
         {
           path: 'forgot',
           name: 'welcome-forgot',
-          component: () => import('@/components/welcome/forgotPage.vue')
+          component: () => import('@/components/welcome/ForgotPage.vue')
         }
       ]
     }, {
       path: '/index',
       name: "index",
-      component: () => import('@/views/IndexView.vue')
+      component: () => import('@/views/IndexView.vue'),
+      children: [
+        {
+          path: 'my-upload',
+          name: 'index-my-upload',
+          component: () => import('@/components/index/MyUploadPage.vue')
+        }
+      ]
+    }, {
+      path: '/upload',
+      name: "upload",
+      component: () => import('@/views/UploadView.vue'),
     }
   ]
+})
+
+router.beforeEach((to, from, next) => {
+  const store = useStore()
+  if(store.auth.user != null && to.name.startsWith('welcome-')) {
+    next('/index')
+  } else if(store.auth.user == null && to.fullPath.startsWith('/index')) {
+    next('/')
+  } else if(to.matched.length === 0){
+    next('/index')
+  } else {
+    next()
+  }
 })
 
 export default router

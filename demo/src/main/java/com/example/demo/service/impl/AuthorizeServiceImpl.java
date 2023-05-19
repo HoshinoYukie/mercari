@@ -1,10 +1,9 @@
-package com.example.demo.service.Impl;
+package com.example.demo.service.impl;
 
-import com.example.demo.entity.Account;
+import com.example.demo.entity.auth.Account;
 import com.example.demo.mapper.UserMapper;
 import com.example.demo.service.AuthorizeService;
 import jakarta.annotation.Resource;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.mail.MailException;
@@ -40,7 +39,7 @@ public class AuthorizeServiceImpl implements AuthorizeService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         if( username == null )
             throw new UsernameNotFoundException("用户名或邮箱不能为空");
-        Account account = mapper.findAccountByUsernameOrEmail(username);
+        Account account = mapper.findAccountByNameOrEmail(username);
         if( account == null )
             throw new UsernameNotFoundException("用户名或密码错误");
         return User
@@ -58,7 +57,7 @@ public class AuthorizeServiceImpl implements AuthorizeService {
             if(expire > 120)
                 return "请求频繁，请稍后再试";
         }
-        Account account = mapper.findAccountByUsernameOrEmail(email);
+        Account account = mapper.findAccountByNameOrEmail(email);
         if(hasAccount && account == null)
             return "没有此邮件地址的账户";
         if(!hasAccount && account != null)
@@ -79,13 +78,15 @@ public class AuthorizeServiceImpl implements AuthorizeService {
             return "邮件发送失败，请联系管理员，并检查邮箱地址是否有效";
         }
     }
+
+    @Override
     public String validateAndRegister(String username, String password, String email, String code, String sessionId) {
         String key = "email:" + sessionId + ":" + email + ":false";
         if(Boolean.TRUE.equals(template.hasKey(key))){
             String s = template.opsForValue().get(key);
             if(s == null) return "验证码失效，请重新请求";
             if(s.equals(code)) {
-                Account account = mapper.findAccountByUsernameOrEmail(username);
+                Account account = mapper.findAccountByNameOrEmail(username);
                 if(account != null) return "此用户名已被注册，请更换用户名";
                 template.delete(key);
                 password = encoder.encode(password);
