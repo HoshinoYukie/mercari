@@ -7,10 +7,7 @@ import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -39,5 +36,36 @@ public class GoodController {
     public RestBean<List<Good>> findMyUpload(@RequestParam("seller_id") int seller_id){
         List<Good> goods = service.findMyUpload(seller_id);
         return RestBean.success(goods);
+    }
+
+    @PostMapping("/my-bought")
+    public RestBean<List<Good>> findMyBought(@RequestParam("buyer_id") int buyer_id){
+        List<Good> goods = service.findMyBought(buyer_id);
+        return RestBean.success(goods);
+    }
+
+    @PostMapping("/my-sold")
+    public RestBean<List<Good>> findMySold(@RequestParam("seller_id") int seller_id){
+        List<Good> goods = service.findMySold(seller_id);
+        return RestBean.success(goods);
+    }
+
+    @GetMapping("/{id}")
+    public RestBean<Good> findGood(@PathVariable(value = "id") int good_id){
+        Good good = service.findGood(good_id);
+        return RestBean.success(good);
+    }
+
+    @PostMapping("/good-edit")
+    public RestBean<String> editGood(@RequestParam("name") String name,
+                                     @RequestParam("description") String description,
+                                     @RequestParam("price") float price,
+                                     @RequestParam("id") int id){
+        String s = service.editGoodInfo(name, description, price, id);
+        if(s == null){
+            return RestBean.success("修改商品信息成功");
+        }
+        else
+            return RestBean.failure(400,s);
     }
 }

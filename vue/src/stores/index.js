@@ -1,4 +1,4 @@
-import {ref, computed, reactive} from 'vue'
+import { reactive } from 'vue'
 import { defineStore } from 'pinia'
 
 export const useStore = defineStore('store', () => {
@@ -6,7 +6,12 @@ export const useStore = defineStore('store', () => {
     user: null
   })
   const user = reactive({
-    uploadGoods: []
+    uploadGoods: [],
+    boughtGoods: [],
+    soldGoods: [],
   })
-  return { auth , user}
+  const good = reactive({
+    info: null
+  })
+  return { auth, user, good}
 })

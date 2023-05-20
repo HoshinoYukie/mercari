@@ -1,30 +1,45 @@
 <template>
-<el-row>
-  <el-col :span="6" v-for="(item) in goods" :key="item.id">
-    <div style="margin: 10px 10px 10px 10px">
-    <el-card shadow="hover" >
-      <img style="background-color: darkgrey" class="image">
-      <div style="padding: 14px">
-        <span>{{item.name}}</span><br/>
-        <span>{{item.description}}</span><br/>
-        <span>{{item.price}}</span>
-        <div class="bottom clearfix">
-          <el-button type="text" class="button">查看</el-button>
-        </div>
+  <el-row>
+    <el-col :span="12" v-for="(good) in goods" :key="good.id">
+      <div style="margin: 10px 10px 10px 10px">
+        <el-card shadow="hover">
+          <img style="background-color: darkgrey" class="image">
+          <div style="padding: 14px">
+            <h4>{{good.name}}</h4>
+            <p>{{good.price}}</p>
+            <div class="bottom clearfix">
+              <el-button type="link" @click="goodInfo(good.id)" class="button">查看</el-button>
+              <el-button type="link" @click="deleteGood(good.id)" class="button">下架</el-button>
+            </div>
+          </div>
+        </el-card>
       </div>
-    </el-card>
-    </div>
-  </el-col>
-</el-row>
+    </el-col>
+  </el-row>
 </template>
 
 <script setup>
 
 import {useStore} from "@/stores";
+import router from "@/router";
+import {get} from "@/net"
 
 const store = useStore()
 
 const goods = store.user.uploadGoods
+
+const goodInfo = (id) => {
+  get('/api/good/' + id , (message) => {
+    store.good.info = message
+        router.push('/good')
+  })
+}
+
+const deleteGood = (id) => {
+  get('/api/good/delete/' + id , (message) => {
+    store.good.info = message
+  })
+}
 
 </script>
 

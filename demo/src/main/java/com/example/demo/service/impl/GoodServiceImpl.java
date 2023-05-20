@@ -27,7 +27,7 @@ public class GoodServiceImpl implements GoodService {
             return null;
         }
         else{
-            return "上架时发生错误，请联系管理员";
+            return "上架时发生错误";
         }
     }
 
@@ -39,5 +39,40 @@ public class GoodServiceImpl implements GoodService {
             return null;
         else
             return goods;
+    }
+
+    @Override
+    public List<Good> findMyBought(int buyer_id){
+        List<Good> goods = mapper.findMyBoughtGood(buyer_id);
+        int num = goods.size();
+        if( num == 0 )
+            return null;
+        else
+            return goods;
+    }
+
+    @Override
+    public List<Good> findMySold(int seller_id){
+        List<Good> goods = mapper.findMySoldGood(seller_id);
+        int num = goods.size();
+        if( num == 0 )
+            return null;
+        else
+            return goods;
+    }
+
+    @Override
+    public Good findGood(int good_id){
+        return mapper.findGood(good_id);
+    }
+
+    @Override
+    public String editGoodInfo(String name, String description, float price, int good_id){
+        if(mapper.editGoodWithoutImg(name, description, price, good_id) > 0){
+            return null;
+        }
+        else{
+            return "修改信息时发生错误";
+        }
     }
 }

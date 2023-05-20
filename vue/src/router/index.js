@@ -34,12 +34,38 @@ const router = createRouter({
           path: 'my-upload',
           name: 'index-my-upload',
           component: () => import('@/components/index/MyUploadPage.vue')
+        },
+        {
+          path: 'my-bought',
+          name: 'index-my-bought',
+          component: () => import('@/components/index/MyBoughtPage.vue')
+        },
+        {
+          path: 'my-sold',
+          name: 'index-my-sold',
+          component: () => import('@/components/index/MySoldPage.vue')
         }
       ]
     }, {
       path: '/upload',
       name: "upload",
       component: () => import('@/views/UploadView.vue'),
+    }, {
+      path: '/good',
+      name: "good",
+      component: () => import('@/views/GoodView.vue'),
+      children: [
+        {
+          path: '',
+          name: 'good-info',
+          component: () => import('@/components/good/GoodInfoPage.vue')
+        },
+        {
+          path: 'edit',
+          name: 'good-edit',
+          component: () => import('@/components/good/GoodEditPage.vue')
+        }
+      ]
     }
   ]
 })

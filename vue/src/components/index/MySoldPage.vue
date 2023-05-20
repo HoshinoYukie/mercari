@@ -18,22 +18,20 @@
 </template>
 
 <script setup>
-
 import {useStore} from "@/stores";
 import router from "@/router";
 import {get} from "@/net"
 
 const store = useStore()
 
-const goods = store.user.boughtGoods
+const goods = store.user.soldGoods
 
 const goodInfo = (id) => {
   get('/api/good/' + id , (message) => {
-      store.good.info = message
-      router.push('/good')
+    store.good.info = message
+        router.push('/good')
   })
 }
-
 </script>
 
 <style scoped>

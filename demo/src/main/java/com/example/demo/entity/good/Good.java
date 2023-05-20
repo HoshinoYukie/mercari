@@ -8,5 +8,7 @@ public class Good {
     String name;
     float price;
     String description;
-    String img_path;
+    int sellerId;
+    String imgPath;
+    int auditing;
 }
