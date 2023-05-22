@@ -12,4 +12,7 @@ public interface GoodService {
     List<Good> findMySold(int seller_id);
     Good findGood(int good_id);
     String editGoodInfo(String name, String description, float price, int good_id);
+    String deleteGood(int good_id);
+    List<Good> searchGoodsByKey(String searchKey);
+    List<Good> showGoods();
 }

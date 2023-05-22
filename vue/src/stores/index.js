@@ -9,9 +9,10 @@ export const useStore = defineStore('store', () => {
     uploadGoods: [],
     boughtGoods: [],
     soldGoods: [],
+    tradingOrder: []
   })
   const good = reactive({
     info: null
   })
-  return { auth, user, good}
+  return { auth, user, good }
 })

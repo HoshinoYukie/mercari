@@ -1,7 +1,7 @@
 <template>
     <el-row justify="center">
       <el-col :xs="24" :sm="16" :md="12">
-        <el-card shadow="hover">
+        <el-card shadow="hover" width="100vh">
           <router-view/>
         </el-card>
       </el-col>

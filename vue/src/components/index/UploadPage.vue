@@ -72,12 +72,7 @@ const uploadGood = () => {
         seller_id: form.seller_id
       },(message) => {
         ElMessage.success(message)
-        post('/api/good/my-upload',{
-          seller_id: store.auth.user.id,
-        },(message) => {
-          store.user.uploadGoods = message;
-          router.push('/index/my-upload')
-        })
+        router.push('/index')
       })
     } else {
       ElMessage.warning('请正确填写所有内容')

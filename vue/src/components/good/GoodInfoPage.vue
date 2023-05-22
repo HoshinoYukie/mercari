@@ -1,26 +1,39 @@
 <template>
   <el-image :src="good.imgPath" fit="contain"></el-image>
-  <div style="margin-top: 20px;">
-    <h1>{{ good.name }}</h1>
-    <p>{{ good.description }}</p>
-    <p>{{ good.price }}</p>
-  </div>
-  <div class="product-actions">
+  <el-form>
+    <div style="margin-top: 20px;">
+      <h1>{{ good.name }}</h1>
+      <p>{{ good.description }}</p>
+      <p>{{ good.price }}</p>
+    </div>
+  </el-form>
+  <div v-if="good.status === 0" class="product-actions">
     <el-button v-if="user.id === good.sellerId" @click="edit(good.id)">编辑</el-button>
-    <el-button v-if="user.id !== good.sellerId" type="primary" @click="buy">购买</el-button>
+    <el-button v-if="user.id !== good.sellerId" type="primary" @click="buy()">购买</el-button>
+  </div>
+  <div v-if="good.status === 1" class="product-actions">
+    <el-button v-if="(user.id === good.sellerId) && (good.status === 1)" @click="finishTrade(good.id)">确认收货</el-button>
   </div>
 </template>
 
 <script setup>
 import {useStore} from "@/stores"
 import router from "@/router";
-import {get} from "@/net"
+import { get, post } from "@/net"
+import {ElMessage} from "element-plus";
+import {reactive} from "vue";
 
 const store = useStore()
-
 const good = store.good.info;
-
 const user = store.auth.user;
+const form = reactive({
+  price: good.price,
+  sellerId: good.sellerId,
+  buyerId: user.id,
+  goodId: good.id
+})
+
+console.log(form)
 
 const edit = (id) => {
   get('/api/good/' + id , (message) => {
@@ -28,6 +41,23 @@ const edit = (id) => {
         router.push('/good/edit')
   })
 }
+
+const buy = () => {
+  console.log(form)
+  post('/api/order/buy', {
+    price: form.price,
+    seller_id: form.sellerId,
+    buyer_id: form.buyerId,
+    good_id: form.goodId
+  }, (message) => {
+    ElMessage.success(message)
+    router.push('/index')
+  }, (message) => {
+    ElMessage.warning(message)
+    router.push('/start')
+  })
+}
+
 </script>
 
 <style scoped>

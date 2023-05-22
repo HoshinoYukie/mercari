@@ -75,4 +75,26 @@ public class GoodServiceImpl implements GoodService {
             return "修改信息时发生错误";
         }
     }
+
+    @Override
+    public String deleteGood(int good_id){
+        if(mapper.deleteGood(good_id) > 0){
+            return null;
+        }
+        else{
+            return "下架时发生错误";
+        }
+    }
+
+    @Override
+    public List<Good> searchGoodsByKey(String key){
+        List<Good> goods = mapper.searchGoodsByKey(key);
+        return goods;
+    }
+
+    @Override
+    public List<Good> showGoods(){
+        List<Good> goods = mapper.showGoods();
+        return goods;
+    }
 }

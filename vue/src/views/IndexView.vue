@@ -1,86 +1,46 @@
 <template>
-    <el-container>
-      <el-header style="margin: 10px">
-        <el-row>
-          <el-col>
-            <div>
-            <el-button @click="router.push('/upload')" type="primary">上架商品</el-button>
-            </div>
-          </el-col>
-          <el-col>
-            <div>
-              <el-button @click="logout()" type="danger" plain>退出登录</el-button>
-            </div>
-          </el-col>
-        </el-row>
-      </el-header>
-      <el-main flex="flex">
-        <el-menu mode="horizontal" style="text-align: center;">
-          <el-menu-item @click="myUpload()">
-            我发布的
-          </el-menu-item>
-          <el-menu-item @click="myBought()">
-            我买到的
-          </el-menu-item>
-          <el-menu-item @click="mySold()">
-            我卖出的
-          </el-menu-item>
-        </el-menu>
-        <el-row justify="center">
-          <el-col :xs="24" :sm="16" :md="12">
-            <router-view/>
-          </el-col>
-        </el-row>
-      </el-main>
-    </el-container>
+<el-row style="margin: 10px 10px;display:flex;flex-wrap: wrap;">
+  <el-col :md="4">
+    <div>
+
+    </div>
+  </el-col>
+
+  <el-col :md="16" :sm="24" style="background-color: wheat" >
+    <el-menu mode="horizontal" style="text-align: center;justify-content: center;">
+      <el-menu-item @click="router.push('/')">
+        搜索商品
+      </el-menu-item>
+      <el-menu-item @click="router.push('/upload')">
+        上架商品
+      </el-menu-item>
+      <el-menu-item @click="router.push('/user')">
+        个人中心
+      </el-menu-item>
+    </el-menu>
+  </el-col>
+
+  <el-col :md="4">
+    <div>
+
+    </div>
+  </el-col>
+</el-row>
+  <router-view/>
 </template>
 
 <script setup>
-import {post, get} from '@/net';
-import {ElMessage} from "element-plus";
-import router from "@/router";
-import {useStore} from "@/stores";
+
+import {reactive} from "vue";
+import {useStore} from "@/stores"
+import router from "@/router"
 
 const store = useStore()
 
-const logout = () => {
-  get('/api/auth/logout', (message) => {
-    ElMessage.success(message)
-    store.auth.user = null,
-    store.user.boughtGoods = [],
-    store.user.uploadGoods = [],
-    store.user.soldGoods = []
-    router.push('/')
-  })
-}
-
-const myUpload = () => {
-  post('/api/good/my-upload',{
-    seller_id: store.auth.user.id,
-  },(message) => {
-    store.user.uploadGoods = message;
-    router.push('/index/my-upload')
-  })
-}
-
-const myBought = () => {
-  post('/api/good/my-bought',{
-    buyer_id: store.auth.user.id,
-  },(message) => {
-    store.user.boughtGoods = message;
-    router.push('/index/my-bought')
-  })
-}
-
-const mySold = () => {
-  post('/api/good/my-sold',{
-    seller_id: store.auth.user.id,
-  },(message) => {
-    store.user.soldGoods = message;
-    router.push('/index/my-sold')
-  })
-}
-
+const searchInfo = reactive({
+  searchKey: '',
+  searchResult: []
+})
 
 </script>
 

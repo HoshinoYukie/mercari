@@ -11,4 +11,5 @@ public class Good {
     int sellerId;
     String imgPath;
     int auditing;
+    int status;
 }

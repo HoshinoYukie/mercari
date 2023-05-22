@@ -31,25 +31,45 @@ const router = createRouter({
       component: () => import('@/views/IndexView.vue'),
       children: [
         {
-          path: 'my-upload',
-          name: 'index-my-upload',
-          component: () => import('@/components/index/MyUploadPage.vue')
-        },
-        {
-          path: 'my-bought',
-          name: 'index-my-bought',
-          component: () => import('@/components/index/MyBoughtPage.vue')
-        },
-        {
-          path: 'my-sold',
-          name: 'index-my-sold',
-          component: () => import('@/components/index/MySoldPage.vue')
+          path: '',
+          name: "search",
+          component: () => import('@/components/index/SearchPage.vue')
+        }, {
+          path: '/upload',
+          name: "uploadGood",
+          component: () => import('@/components/index/UploadPage.vue')
+        }, {
+          path: '/user',
+          name: "user",
+          component: () => import('@/components/index/UserPage.vue'),
+          children: [
+            {
+              path: 'my-upload',
+              name: 'user-my-upload',
+              component: () => import('@/components/index/user/MyUploadPage.vue')
+            },
+            {
+              path: 'my-bought',
+              name: 'user-my-bought',
+              component: () => import('@/components/index/user/MyBoughtPage.vue')
+            },
+            {
+              path: 'my-sold',
+              name: 'user-my-sold',
+              component: () => import('@/components/index/user/MySoldPage.vue')
+            },
+            {
+              path: 'my-trading',
+              name: 'user-my-trading',
+              component: () => import('@/components/index/user/MyTradingPage.vue')
+            }
+          ]
         }
       ]
     }, {
       path: '/upload',
       name: "upload",
-      component: () => import('@/views/UploadView.vue'),
+      component: () => import('@/views/UploadPage.vue'),
     }, {
       path: '/good',
       name: "good",
