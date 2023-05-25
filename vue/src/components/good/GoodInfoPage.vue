@@ -11,9 +11,8 @@
     <el-button v-if="user.id === good.sellerId" @click="edit(good.id)">编辑</el-button>
     <el-button v-if="user.id !== good.sellerId" type="primary" @click="buy()">购买</el-button>
   </div>
-  <div v-if="good.status === 1" class="product-actions">
-    <el-button v-if="(user.id === good.sellerId) && (good.status === 1)" @click="finishTrade(good.id)">确认收货</el-button>
-  </div>
+    <el-button v-if="(user.id === good.sellerId) && (good.status === 1)" @click="continueTrade(good.id)">已与买家取得联系</el-button>
+    <el-button v-if="(user.id !== good.sellerId) && (good.status === 2)" @click="finishTrade(good.id)" type="primary">确认收货</el-button>
 </template>
 
 <script setup>
@@ -39,6 +38,20 @@ const edit = (id) => {
   get('/api/good/' + id , (message) => {
     store.good.info = message
         router.push('/good/edit')
+  })
+}
+
+const continueTrade = (id) => {
+  get('/api/order/continue/' + id , (message) => {
+    ElMessage.success(message),
+        router.push('/index/user')
+  })
+}
+
+const finishTrade = (id) => {
+  get('/api/order/finish/' + id , (message) => {
+    ElMessage.success(message),
+        router.push('/index/user')
   })
 }
 

@@ -113,12 +113,12 @@ public class GoodController {
     }
 
     @PostMapping("/uploadimg")
-    public RestBean<String> uploadImg(MultipartFile mFile) {
+    public String uploadImg(MultipartFile mFile) {
         String folder = "D:/mercari/file/img";
         File imgFolder = new File(folder);
         String fname = mFile.getOriginalFilename();
         if( !isImage(fname) )
-            return RestBean.failure(400,"仅允许图片上传");
+            return "";
         else {
             String ext = "." + fname.substring(fname.lastIndexOf(".") + 1);
             String dateTimeFormatter = DateTimeFormatter.ofPattern("yy-MM-dd-HH:mm:ss").format(LocalDateTime.now());
@@ -130,10 +130,10 @@ public class GoodController {
             try{
                 mFile.transferTo(filePath);
                 // 返回文件名
-                return RestBean.success(filePath.getName());
+                return filePath.getName();
             }catch (IOException e){
                 e.printStackTrace();
-                return RestBean.failure(400,"在上传图片时发生错误");
+                return "";
             }
         }
     }

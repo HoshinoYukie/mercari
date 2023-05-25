@@ -22,10 +22,10 @@ public interface GoodMapper {
     @Update("update good set status = 1 where id = #{good_id}")
     int goodStatusChangeToSold(int good_id);
 
-    @Select("select * from good,(select good_id from orderdetail where buyer_id = #{buyer_id} and status = 2) a where good.id = a.good_id")
+    @Select("select * from good,(select good_id from orderdetail where buyer_id = #{buyer_id} and status = 3) a where good.id = a.good_id and status = 3")
     List<Good> findMyBoughtGood(int buyer_id);
 
-    @Select("select * from good,(select good_id from orderdetail where seller_id = #{seller_id} and status = 2) a where good.id = a.good_id")
+    @Select("select * from good,(select good_id from orderdetail where seller_id = #{seller_id} and status = 3) a where good.id = a.good_id and status = 3")
     List<Good> findMySoldGood(int seller_id);
 
     @Select("select * from good where id = #{good_id}")
@@ -42,4 +42,10 @@ public interface GoodMapper {
 
     @Select("select * from good where status = 0")
     List<Good> showGoods();
+
+    @Update("update good set status = 2 where id = #{good_id}")
+    int continueTrade(int good_id);
+
+    @Update("update good set status = 3 where id = #{good_id}")
+    int finishTrade(int good_id);
 }

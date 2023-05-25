@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.entity.RestBean;
 import com.example.demo.entity.good.Good;
+import com.example.demo.entity.goodorder.GoodOrder;
 import com.example.demo.entity.orderdetail.OrderDetail;
 import com.example.demo.mapper.OrderDetailMapper;
 import com.example.demo.service.GoodService;
@@ -33,7 +34,25 @@ public class OrderDetailController {
     }
 
     @GetMapping("/my-trading/{user_id}")
-    public RestBean<List<OrderDetail>> findMyTrading(@PathVariable(value = "user_id") int user_id){
+    public RestBean<List<GoodOrder>> findMyTrading(@PathVariable(value = "user_id") int user_id){
         return RestBean.success(service.findMyTrading(user_id));
+    }
+
+    @GetMapping("/continue/{good_id}")
+    public RestBean<String> continueTrade(@PathVariable(value = "good_id") int good_id){
+        String s = service.continueTrade(good_id);
+        if( s == null ){
+            return RestBean.success("请及时发货或进行线下交易");
+        } else
+            return RestBean.failure(400,s);
+    }
+
+    @GetMapping("/finish/{good_id}")
+    public RestBean<String> finishTrade(@PathVariable(value = "good_id") int good_id){
+        String s = service.finishTrade(good_id);
+        if( s == null ){
+            return RestBean.success("交易结束");
+        } else
+            return RestBean.failure(400,s);
     }
 }

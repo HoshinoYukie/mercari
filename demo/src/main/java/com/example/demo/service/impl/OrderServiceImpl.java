@@ -1,6 +1,6 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.entity.orderdetail.OrderDetail;
+import com.example.demo.entity.goodorder.GoodOrder;
 import com.example.demo.mapper.GoodMapper;
 import com.example.demo.mapper.OrderDetailMapper;
 import com.example.demo.service.OrderDetailService;
@@ -44,7 +44,23 @@ public class OrderServiceImpl implements OrderDetailService {
     }
 
     @Override
-    public List<OrderDetail> findMyTrading(int user_id){
+    public List<GoodOrder> findMyTrading(int user_id){
         return orderDetailMapper.findMyTrading(user_id);
+    }
+
+    @Override
+    public String continueTrade(int good_id){
+        if( goodMapper.continueTrade(good_id) > 0 && orderDetailMapper.continueTrade(good_id) > 0 )
+            return null;
+        else
+            return "该商品不存在";
+    }
+
+    @Override
+    public String finishTrade(int good_id){
+        if( goodMapper.finishTrade(good_id) > 0 && orderDetailMapper.finishTrade(good_id) > 0 )
+            return null;
+        else
+            return "该商品不存在";
     }
 }
